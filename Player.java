@@ -31,20 +31,30 @@ public class Player extends GameObject {
 
   }
 
-  private void collision(){
-    for(int i = 0; i< handler.object.size(); i++){
-      GameObject tempObject = handler.object.get(i);
-      if(tempObject.getID() == ID.Block){
-        if(getBounds().intersects(tempObject.getBounds())){
-          x += velX * -1;
-          y += velY * -1;
-        }
-      }
+  public boolean intersection(int x, int y, Rectangle myRect, Rectangle otherRect) {
+    if(new Rectangle(x, y, myRect.width, myRect.height).intersects(otherRect)){
+     return true;
     }
-  }
+    return false;
+   }
+
+   public void collision(){
+    for (int i = 0; i < handler.object.size(); i++) {
+     GameObject tempObject = handler.object.get(i);
+     if(tempObject.getID() == ID.Block){
+      if(intersection((int)(x + velX), y, getBounds(), tempObject.getBounds())){
+       x += velX * -1;
+      }
+      if(intersection(x,(int)(y + velY), getBounds(), tempObject.getBounds())){
+       y += velY * -1;
+      }
+     }
+    }
+
+   }
 
   public void render(Graphics g){
-    g.setColor(Color.blue);
+    g.setColor(Color.PINK);
     g.fillRect(x, y, 16, 16);
   }
 
